@@ -320,6 +320,7 @@ describe("discoverModels", () => {
 				data: [
 					{ id: "vision-model", architecture: { input_modalities: ["text", "image"] } },
 					{ id: "cap-model", capabilities: ["completion", "vision"] },
+					{ id: "object-vision", capabilities: { vision: true } },
 					{ id: "text-model", architecture: { input_modalities: ["text"] } },
 				],
 			},
@@ -329,6 +330,7 @@ describe("discoverModels", () => {
 		const byId = Object.fromEntries(r.models.map((m) => [m.id, Boolean(m.image)]));
 		assert.equal(byId["vision-model"], true);
 		assert.equal(byId["cap-model"], true);
+		assert.equal(byId["object-vision"], true);
 		assert.equal(byId["text-model"], false);
 	});
 	it("detects token limits from common metadata fields", async () => {
@@ -360,6 +362,7 @@ describe("discoverModels", () => {
 					{ id: "bool-reasoner", reasoning: true },
 					{ id: "thinking-flag", thinking: true },
 					{ id: "cap-reasoner", capabilities: ["completion", "reasoning"] },
+					{ id: "object-reasoner", capabilities: { reasoning: true } },
 					{ id: "deepseek-r1-distill" }, // a reasoning-sounding NAME, no metadata → stays off
 				],
 			},
@@ -371,6 +374,7 @@ describe("discoverModels", () => {
 		assert.equal(byId["bool-reasoner"], true);
 		assert.equal(byId["thinking-flag"], true);
 		assert.equal(byId["cap-reasoner"], true);
+		assert.equal(byId["object-reasoner"], true);
 		assert.equal(byId["deepseek-r1-distill"], false, "name guessing would risk sending reasoning_effort to a server that rejects it");
 	});
 

@@ -159,6 +159,8 @@ function modelRows(body: unknown): unknown[] | null {
  *  capability fields; absent or unrecognized → false (text-only). */
 function detectImage(row: Record<string, unknown>): boolean {
 	const architecture = isRecord(row.architecture) ? row.architecture : undefined;
+	const capabilities = isRecord(row.capabilities) ? row.capabilities : undefined;
+	if (capabilities?.vision === true || capabilities?.image === true || capabilities?.image_input === true) return true;
 	const candidates = [
 		architecture?.input_modalities,
 		row.input_modalities,
@@ -183,6 +185,8 @@ function detectReasoning(row: Record<string, unknown>): boolean {
 		if (row[key] === true) return true;
 	}
 	const architecture = isRecord(row.architecture) ? row.architecture : undefined;
+	const capabilities = isRecord(row.capabilities) ? row.capabilities : undefined;
+	if (capabilities?.reasoning === true || capabilities?.thinking === true) return true;
 	const candidates = [row.supported_parameters, row.capabilities, row.tags, architecture?.output_modalities];
 	return candidates.some(
 		(list) =>
